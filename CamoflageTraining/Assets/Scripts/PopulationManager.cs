@@ -20,9 +20,9 @@ namespace Assets.Scripts {
                 Vector3 position = this.GetRandomSpawnPosition();
                 GameObject personToSpawn = GameObject.Instantiate(this.personPrefab, position, Quaternion.identity);
                 DNA dnaObject = personToSpawn.GetComponent<DNA>();
-                dnaObject.r = Random.Range(0.0f, 1f);
-                dnaObject.g = Random.Range(0.0f, 1f);
-                dnaObject.b = Random.Range(0.0f, 1f);
+                dnaObject.R = Random.Range(0.0f, 1f);
+                dnaObject.G = Random.Range(0.0f, 1f);
+                dnaObject.B = Random.Range(0.0f, 1f);
                 this.population.Add(personToSpawn);
             }
         }
@@ -36,7 +36,7 @@ namespace Assets.Scripts {
         }
 
         private void BreedNewPopulation() {
-            List<GameObject> sortedPopulation = this.population.OrderBy(x => x.GetComponent<DNA>().timeBeforeDeath).ToList();
+            List<GameObject> sortedPopulation = this.population.OrderBy(x => x.GetComponent<DNA>().TimeBeforeDeath).ToList();
 
             this.population.Clear();
 
@@ -61,9 +61,9 @@ namespace Assets.Scripts {
             DNA dnaParentA = parentA.GetComponent<DNA>();
             DNA dnaParentB = parentB.GetComponent<DNA>();
             DNA offspringDNA = offspring.GetComponent<DNA>();
-            offspringDNA.r = (Random.Range(0, 2) == 0) ? dnaParentA.r : dnaParentB.r;
-            offspringDNA.g = (Random.Range(0, 2) == 0) ? dnaParentA.g : dnaParentB.g;
-            offspringDNA.b = (Random.Range(0, 2) == 0) ? dnaParentA.b : dnaParentB.b;
+            offspringDNA.R = (Random.Range(0, 2) == 0) ? dnaParentA.R : dnaParentB.R;
+            offspringDNA.G = (Random.Range(0, 2) == 0) ? dnaParentA.G : dnaParentB.G;
+            offspringDNA.B = (Random.Range(0, 2) == 0) ? dnaParentA.B : dnaParentB.B;
             /*
             bool shouldMutate = (Random.Range(0, 2) == 0);
             if (shouldMutate) {

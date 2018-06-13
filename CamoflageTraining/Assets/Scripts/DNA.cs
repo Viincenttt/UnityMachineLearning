@@ -2,11 +2,11 @@
 
 namespace Assets.Scripts {
     public class DNA : MonoBehaviour {
-        public float r;
-        public float g;
-        public float b;
+        public float R { get; set; }
+        public float G { get; set; }
+        public float B { get; set; }
 
-        public float timeBeforeDeath = 0f;
+        public float TimeBeforeDeath { get; set; } = 0f;
         private bool isDead = false;
 
         private SpriteRenderer _spriteRenderer;
@@ -18,19 +18,13 @@ namespace Assets.Scripts {
             this._spriteRenderer = this.GetComponent<SpriteRenderer>();
             this._collider2D = this.GetComponent<Collider2D>();
 
-            this._spriteRenderer.color = new Color(this.r, this.g, this.b);
+            this._spriteRenderer.color = new Color(this.R, this.G, this.B);
         }
-
-        private void Update() {
-            
-        }
-
         private void OnMouseDown() {
             this.isDead = true;
-            this.timeBeforeDeath = PopulationManager.elapsedTime;
+            this.TimeBeforeDeath = PopulationManager.elapsedTime;
             this._spriteRenderer.enabled = false;
             this._collider2D.enabled = false;
         }
-
     }
 }
