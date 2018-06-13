@@ -7,6 +7,7 @@ namespace Assets.Scripts {
         public float R { get; set; }
         public float G { get; set; }
         public float B { get; set; }
+        public float Scale { get; set; }
 
         public float TimeBeforeDeath { get; set; } = 0f;
 
@@ -18,6 +19,7 @@ namespace Assets.Scripts {
             this._collider2D = this.GetComponent<Collider2D>();
 
             this._spriteRenderer.color = new Color(this.R, this.G, this.B);
+            this.transform.localScale = new Vector3(this.Scale, this.Scale);
         }
 
         private void OnMouseDown() {

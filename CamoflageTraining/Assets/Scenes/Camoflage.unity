@@ -140,9 +140,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1501de5d061bf045b285d382e536ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personPrefab: {fileID: 1734903543758822, guid: 51d6f09c4aada4554a972165211005c2,
+  _personToSpawn: {fileID: 1734903543758822, guid: 51d6f09c4aada4554a972165211005c2,
     type: 2}
-  populationSize: 10
+  _populationSize: 10
+  _trialTime: 10
+  _elapsedTime: {fileID: 11400000, guid: b709cf23a24771f47b1f64c9935c957b, type: 2}
+  _minimumSize: 0.03
+  _maximumSize: 0.25
+  _minimumXSpawnPosition: -8
+  _maximumXSpawnPosition: 8
+  _minimumYSpawnPosition: -4.5
+  _maximumYSpawnPosition: 4.5
 --- !u!4 &772509974
 Transform:
   m_ObjectHideFlags: 0

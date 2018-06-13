@@ -10,6 +10,8 @@ namespace Assets.Scripts {
         [SerializeField] private int _populationSize = 10;
         [SerializeField] private int _trialTime = 10;
         [SerializeField] private FloatVariable _elapsedTime;
+        [SerializeField] private float _minimumSize = 0.1f;
+        [SerializeField] private float _maximumSize = 0.25f;
 
         [Header("Spawn position bounds")]
         [SerializeField] private float _minimumXSpawnPosition = -8;
@@ -35,7 +37,7 @@ namespace Assets.Scripts {
 
         private void SpawnInitialPopulation() {
             for (int i = 0; i < this._populationSize; i++) {
-                this.SpawnPerson(Random.Range(0.0f, 1f), Random.Range(0.0f, 1f), Random.Range(0.0f, 1f));
+                this.SpawnPerson(Random.Range(0.0f, 1f), Random.Range(0.0f, 1f), Random.Range(0.0f, 1f), Random.Range(this._minimumSize, this._maximumSize));
             }
         }
 
@@ -62,17 +64,19 @@ namespace Assets.Scripts {
             float r = (Random.Range(0, 2) == 0) ? dnaParentA.R : dnaParentB.R;
             float g = (Random.Range(0, 2) == 0) ? dnaParentA.G : dnaParentB.G;
             float b = (Random.Range(0, 2) == 0) ? dnaParentA.B : dnaParentB.B;
+            float scale = (Random.Range(0, 2) == 0) ? dnaParentA.Scale : dnaParentB.Scale;
 
-            this.SpawnPerson(r, g, b);
+            this.SpawnPerson(r, g, b, scale);
         }
 
-        private void SpawnPerson(float r, float g, float b) {
+        private void SpawnPerson(float r, float g, float b, float scale) {
             Vector3 position = this.GetRandomSpawnPosition();
             GameObject personToSpawn = GameObject.Instantiate(this._personToSpawn, position, Quaternion.identity, this.transform);
             DNA dnaObject = personToSpawn.GetComponent<DNA>();
             dnaObject.R = r;
             dnaObject.G = g;
             dnaObject.B = b;
+            dnaObject.Scale = scale;
         }
 
         private DNA[] GetCurrentPopulation() {
