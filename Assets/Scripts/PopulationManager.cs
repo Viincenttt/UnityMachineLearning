@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Assets {
+namespace Assets.Scripts {
     public class PopulationManager : MonoBehaviour {
         public GameObject personPrefab;
         public int populationSize = 10;

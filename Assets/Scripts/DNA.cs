@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets {
+namespace Assets.Scripts {
     public class DNA : MonoBehaviour {
         public float r;
         public float g;
