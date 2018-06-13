@@ -23,9 +23,7 @@ namespace Assets.Scripts {
         private GUIStyle guiStyle = new GUIStyle();
 
         private void Start() {
-            for (int i = 0; i < this._populationSize; i++) {
-                this.SpawnPerson(Random.Range(0.0f, 1f), Random.Range(0.0f, 1f), Random.Range(0.0f, 1f));
-            }
+            this.SpawnInitialPopulation();
         }
 
         private void Update() {
@@ -33,6 +31,12 @@ namespace Assets.Scripts {
             if (this._elapsedTime.Value > this._trialTime) {
                 this.BreedNewPopulation();
                 this._elapsedTime.Value = 0;
+            }
+        }
+
+        private void SpawnInitialPopulation() {
+            for (int i = 0; i < this._populationSize; i++) {
+                this.SpawnPerson(Random.Range(0.0f, 1f), Random.Range(0.0f, 1f), Random.Range(0.0f, 1f));
             }
         }
 
