@@ -10,6 +10,11 @@ namespace Assets.Scripts {
         [SerializeField] private int _populationSize = 10;
         [SerializeField] private int _trialTime = 10;
 
+        [Header("Spawn position bounds")]
+        [SerializeField] private float _minimumXSpawnPosition = -8;
+        [SerializeField] private float _maximumXSpawnPosition = 8;
+        [SerializeField] private float _minimumYSpawnPosition = -4.5f;
+        [SerializeField] private float _maximumYSpawnPosition = 4.5f;
 
         private int _currentGeneration = 1;
 
@@ -81,7 +86,7 @@ namespace Assets.Scripts {
         }
 
         private Vector3 GetRandomSpawnPosition() {
-            return new Vector3(Random.Range(-8, 8), Random.Range(-4.5f, 4.5f), 0);
+            return new Vector3(Random.Range(this._minimumXSpawnPosition, this._maximumXSpawnPosition), Random.Range(this._minimumYSpawnPosition, this._maximumYSpawnPosition), 0);
         }
 
         private void OnGUI() {
