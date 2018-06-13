@@ -9,6 +9,7 @@ namespace Assets.Scripts {
         [SerializeField] private GameObject _personToSpawn;
         [SerializeField] private int _populationSize = 10;
         [SerializeField] private int _trialTime = 10;
+        [SerializeField] private FloatVariable _elapsedTime;
 
         [Header("Spawn position bounds")]
         [SerializeField] private float _minimumXSpawnPosition = -8;
@@ -19,7 +20,6 @@ namespace Assets.Scripts {
         private int _currentGeneration = 1;
 
         List<GameObject> population=  new List<GameObject>();
-        public static float elapsedTime = 0;
         private GUIStyle guiStyle = new GUIStyle();
 
         private void Start() {
@@ -29,10 +29,10 @@ namespace Assets.Scripts {
         }
 
         private void Update() {
-            elapsedTime += Time.deltaTime;
-            if (elapsedTime > this._trialTime) {
+            this._elapsedTime.Value += Time.deltaTime;
+            if (this._elapsedTime.Value > this._trialTime) {
                 this.BreedNewPopulation();
-                elapsedTime = 0;
+                this._elapsedTime.Value = 0;
             }
         }
 
@@ -93,7 +93,7 @@ namespace Assets.Scripts {
             this.guiStyle.fontSize = 50;
             this.guiStyle.normal.textColor = Color.white;
             GUI.Label(new Rect(10, 10, 100, 20), $"Generation: {this._currentGeneration}", this.guiStyle);
-            GUI.Label(new Rect(10, 65, 100, 20), $"Trial time: {(int)elapsedTime}", this.guiStyle);
+            GUI.Label(new Rect(10, 65, 100, 20), $"Trial time: {(int)this._elapsedTime.Value}", this.guiStyle);
         }
     }
 }

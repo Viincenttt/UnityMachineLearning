@@ -2,6 +2,8 @@
 
 namespace Assets.Scripts {
     public class DNA : MonoBehaviour {
+        [SerializeField] private FloatVariable _elapsedTime;
+
         public float R { get; set; }
         public float G { get; set; }
         public float B { get; set; }
@@ -19,7 +21,7 @@ namespace Assets.Scripts {
         }
 
         private void OnMouseDown() {
-            this.TimeBeforeDeath = PopulationManager.elapsedTime;
+            this.TimeBeforeDeath = this._elapsedTime.Value;
             this._spriteRenderer.enabled = false;
             this._collider2D.enabled = false;
         }
