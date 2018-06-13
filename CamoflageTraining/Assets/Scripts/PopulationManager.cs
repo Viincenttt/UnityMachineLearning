@@ -5,20 +5,22 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts {
     public class PopulationManager : MonoBehaviour {
-        public GameObject personPrefab;
-        public int populationSize = 10;
+        [Header("Spawning configuration")]
+        [SerializeField] private GameObject _personToSpawn;
+        [SerializeField] private int _populationSize = 10;
+        [SerializeField] private int _trialTime = 10;
 
-        private int trialTime = 6;
-        private int generation = 1;
+
+        private int _currentGeneration = 1;
 
         List<GameObject> population=  new List<GameObject>();
         public static float elapsedTime = 0;
         private GUIStyle guiStyle = new GUIStyle();
 
         private void Start() {
-            for (int i = 0; i < this.populationSize; i++) {
+            for (int i = 0; i < this._populationSize; i++) {
                 Vector3 position = this.GetRandomSpawnPosition();
-                GameObject personToSpawn = GameObject.Instantiate(this.personPrefab, position, Quaternion.identity);
+                GameObject personToSpawn = GameObject.Instantiate(this._personToSpawn, position, Quaternion.identity);
                 DNA dnaObject = personToSpawn.GetComponent<DNA>();
                 dnaObject.R = Random.Range(0.0f, 1f);
                 dnaObject.G = Random.Range(0.0f, 1f);
@@ -29,7 +31,7 @@ namespace Assets.Scripts {
 
         private void Update() {
             elapsedTime += Time.deltaTime;
-            if (elapsedTime > this.trialTime) {
+            if (elapsedTime > this._trialTime) {
                 this.BreedNewPopulation();
                 elapsedTime = 0;
             }
@@ -52,12 +54,12 @@ namespace Assets.Scripts {
                 GameObject.Destroy(sortedPopulation[i]);
             }
 
-            this.generation++;
+            this._currentGeneration++;
         }
 
         private GameObject Breed(GameObject parentA, GameObject parentB) {
             Vector3 spawnPosition = this.GetRandomSpawnPosition();
-            GameObject offspring = GameObject.Instantiate(this.personPrefab, spawnPosition, Quaternion.identity);
+            GameObject offspring = GameObject.Instantiate(this._personToSpawn, spawnPosition, Quaternion.identity);
             DNA dnaParentA = parentA.GetComponent<DNA>();
             DNA dnaParentB = parentB.GetComponent<DNA>();
             DNA offspringDNA = offspring.GetComponent<DNA>();
@@ -85,7 +87,7 @@ namespace Assets.Scripts {
         private void OnGUI() {
             this.guiStyle.fontSize = 50;
             this.guiStyle.normal.textColor = Color.white;
-            GUI.Label(new Rect(10, 10, 100, 20), "Generation: " + this.generation, this.guiStyle);
+            GUI.Label(new Rect(10, 10, 100, 20), "Generation: " + this._currentGeneration, this.guiStyle);
             GUI.Label(new Rect(10, 65, 100, 20), "Trial time: " + (int)elapsedTime, this.guiStyle);
         }
     }
