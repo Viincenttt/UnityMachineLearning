@@ -24,13 +24,7 @@ namespace Assets.Scripts {
 
         private void Start() {
             for (int i = 0; i < this._populationSize; i++) {
-                Vector3 position = this.GetRandomSpawnPosition();
-                GameObject personToSpawn = GameObject.Instantiate(this._personToSpawn, position, Quaternion.identity);
-                DNA dnaObject = personToSpawn.GetComponent<DNA>();
-                dnaObject.R = Random.Range(0.0f, 1f);
-                dnaObject.G = Random.Range(0.0f, 1f);
-                dnaObject.B = Random.Range(0.0f, 1f);
-                this.population.Add(personToSpawn);
+                this.SpawnPerson(Random.Range(0.0f, 1f), Random.Range(0.0f, 1f), Random.Range(0.0f, 1f));
             }
         }
 
@@ -47,14 +41,11 @@ namespace Assets.Scripts {
 
             this.population.Clear();
 
-
             for (int i = (int)(sortedPopulation.Count / 2.0f) - 1; i < sortedPopulation.Count - 1; i++) {
-                this.population.Add(this.Breed(sortedPopulation[i], sortedPopulation[i + 1]));
-                this.population.Add(this.Breed(sortedPopulation[i + 1], sortedPopulation[i]));
+                this.BreedPerson(sortedPopulation[i], sortedPopulation[i + 1]);
+                this.BreedPerson(sortedPopulation[i + 1], sortedPopulation[i]);
             }
-
             
-
             for (int i = 0; i < sortedPopulation.Count; i++) {
                 GameObject.Destroy(sortedPopulation[i]);
             }
@@ -62,15 +53,15 @@ namespace Assets.Scripts {
             this._currentGeneration++;
         }
 
-        private GameObject Breed(GameObject parentA, GameObject parentB) {
-            Vector3 spawnPosition = this.GetRandomSpawnPosition();
-            GameObject offspring = GameObject.Instantiate(this._personToSpawn, spawnPosition, Quaternion.identity);
+        private void BreedPerson(GameObject parentA, GameObject parentB) {
             DNA dnaParentA = parentA.GetComponent<DNA>();
             DNA dnaParentB = parentB.GetComponent<DNA>();
-            DNA offspringDNA = offspring.GetComponent<DNA>();
-            offspringDNA.R = (Random.Range(0, 2) == 0) ? dnaParentA.R : dnaParentB.R;
-            offspringDNA.G = (Random.Range(0, 2) == 0) ? dnaParentA.G : dnaParentB.G;
-            offspringDNA.B = (Random.Range(0, 2) == 0) ? dnaParentA.B : dnaParentB.B;
+
+            float r = (Random.Range(0, 2) == 0) ? dnaParentA.R : dnaParentB.R;
+            float g = (Random.Range(0, 2) == 0) ? dnaParentA.G : dnaParentB.G;
+            float b = (Random.Range(0, 2) == 0) ? dnaParentA.B : dnaParentB.B;
+
+            this.SpawnPerson(r, g, b);
             /*
             bool shouldMutate = (Random.Range(0, 2) == 0);
             if (shouldMutate) {
@@ -81,8 +72,17 @@ namespace Assets.Scripts {
             else {
                 
             }*/
+        }
 
-            return offspring;
+        private void SpawnPerson(float r, float g, float b) {
+            Vector3 position = this.GetRandomSpawnPosition();
+            GameObject personToSpawn = GameObject.Instantiate(this._personToSpawn, position, Quaternion.identity);
+            DNA dnaObject = personToSpawn.GetComponent<DNA>();
+            dnaObject.R = r;
+            dnaObject.G = g;
+            dnaObject.B = b;
+
+            this.population.Add(personToSpawn);
         }
 
         private Vector3 GetRandomSpawnPosition() {
@@ -92,8 +92,8 @@ namespace Assets.Scripts {
         private void OnGUI() {
             this.guiStyle.fontSize = 50;
             this.guiStyle.normal.textColor = Color.white;
-            GUI.Label(new Rect(10, 10, 100, 20), "Generation: " + this._currentGeneration, this.guiStyle);
-            GUI.Label(new Rect(10, 65, 100, 20), "Trial time: " + (int)elapsedTime, this.guiStyle);
+            GUI.Label(new Rect(10, 10, 100, 20), $"Generation: {this._currentGeneration}", this.guiStyle);
+            GUI.Label(new Rect(10, 65, 100, 20), $"Trial time: {(int)elapsedTime}", this.guiStyle);
         }
     }
 }
