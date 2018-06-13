@@ -7,21 +7,18 @@ namespace Assets.Scripts {
         public float B { get; set; }
 
         public float TimeBeforeDeath { get; set; } = 0f;
-        private bool isDead = false;
 
         private SpriteRenderer _spriteRenderer;
         private Collider2D _collider2D;
-
-
-
+        
         private void Start() {
             this._spriteRenderer = this.GetComponent<SpriteRenderer>();
             this._collider2D = this.GetComponent<Collider2D>();
 
             this._spriteRenderer.color = new Color(this.R, this.G, this.B);
         }
+
         private void OnMouseDown() {
-            this.isDead = true;
             this.TimeBeforeDeath = PopulationManager.elapsedTime;
             this._spriteRenderer.enabled = false;
             this._collider2D.enabled = false;
