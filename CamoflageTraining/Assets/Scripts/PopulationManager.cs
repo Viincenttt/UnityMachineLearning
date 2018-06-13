@@ -19,10 +19,10 @@ namespace Assets.Scripts {
 
         private int _currentGeneration = 1;
 
-        List<GameObject> population=  new List<GameObject>();
         private GUIStyle guiStyle = new GUIStyle();
 
         private void Start() {
+            this._elapsedTime.Value = 0;
             this.SpawnInitialPopulation();
         }
 
@@ -30,7 +30,6 @@ namespace Assets.Scripts {
             this._elapsedTime.Value += Time.deltaTime;
             if (this._elapsedTime.Value > this._trialTime) {
                 this.BreedNewPopulation();
-                this._elapsedTime.Value = 0;
             }
         }
 
@@ -41,52 +40,43 @@ namespace Assets.Scripts {
         }
 
         private void BreedNewPopulation() {
-            List<GameObject> sortedPopulation = this.population.OrderBy(x => x.GetComponent<DNA>().TimeBeforeDeath).ToList();
+            // Order the population by the time before they died
+            List<DNA> population = this.GetCurrentPopulation().OrderBy(x => x.TimeBeforeDeath).ToList();
 
-            this.population.Clear();
-
-            for (int i = (int)(sortedPopulation.Count / 2.0f) - 1; i < sortedPopulation.Count - 1; i++) {
-                this.BreedPerson(sortedPopulation[i], sortedPopulation[i + 1]);
-                this.BreedPerson(sortedPopulation[i + 1], sortedPopulation[i]);
-            }
-            
-            for (int i = 0; i < sortedPopulation.Count; i++) {
-                GameObject.Destroy(sortedPopulation[i]);
+            // Breed the fittest half of the population
+            for (int i = (int)(population.Count / 2.0f) - 1; i < population.Count - 1; i++) {
+                this.BreedPerson(population[i], population[i + 1]);
+                this.BreedPerson(population[i + 1], population[i]);
             }
 
+            // Destroy the previous population
+            foreach (DNA person in population) {
+                GameObject.Destroy(person.gameObject);
+            }
+
+            this._elapsedTime.Value = 0;
             this._currentGeneration++;
         }
 
-        private void BreedPerson(GameObject parentA, GameObject parentB) {
-            DNA dnaParentA = parentA.GetComponent<DNA>();
-            DNA dnaParentB = parentB.GetComponent<DNA>();
-
+        private void BreedPerson(DNA dnaParentA, DNA dnaParentB) {
             float r = (Random.Range(0, 2) == 0) ? dnaParentA.R : dnaParentB.R;
             float g = (Random.Range(0, 2) == 0) ? dnaParentA.G : dnaParentB.G;
             float b = (Random.Range(0, 2) == 0) ? dnaParentA.B : dnaParentB.B;
 
             this.SpawnPerson(r, g, b);
-            /*
-            bool shouldMutate = (Random.Range(0, 2) == 0);
-            if (shouldMutate) {
-                offspringDNA.r = Random.Range(0.0f, 1f);
-                offspringDNA.g = Random.Range(0.0f, 1f);
-                offspringDNA.b = Random.Range(0.0f, 1f);
-            }
-            else {
-                
-            }*/
         }
 
         private void SpawnPerson(float r, float g, float b) {
             Vector3 position = this.GetRandomSpawnPosition();
-            GameObject personToSpawn = GameObject.Instantiate(this._personToSpawn, position, Quaternion.identity);
+            GameObject personToSpawn = GameObject.Instantiate(this._personToSpawn, position, Quaternion.identity, this.transform);
             DNA dnaObject = personToSpawn.GetComponent<DNA>();
             dnaObject.R = r;
             dnaObject.G = g;
             dnaObject.B = b;
+        }
 
-            this.population.Add(personToSpawn);
+        private DNA[] GetCurrentPopulation() {
+            return this.GetComponentsInChildren<DNA>();
         }
 
         private Vector3 GetRandomSpawnPosition() {
