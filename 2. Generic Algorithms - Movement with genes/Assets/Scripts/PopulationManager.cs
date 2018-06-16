@@ -6,19 +6,18 @@ namespace Assets.Scripts {
     public class PopulationManager : MonoBehaviour {
         [SerializeField] private GameObject _characterToSpawn;
         [SerializeField] private int _populationSize = 1;
+        [SerializeField] private float _trialTime = 5;
 
         [Header("Spawn position bounds")]
         [SerializeField] private float _xOffSetSpawningPosition = 2;
         [SerializeField] private float _yOffSetSpawningPosition = -2;
 
         private float _elapsedTime = 0;
-        private float _trialTime = 5;
         private int _currentGeneration = 1;
 
         private GUIStyle _guiStyle = new GUIStyle();
         
         void Start () {
-            //this._elapsedTime.Value = 0;
             this.SpawnInitialPopulation();
         }
 	
@@ -42,9 +41,7 @@ namespace Assets.Scripts {
             Vector3 startingPosition = this.GetNewSpawningPosition();
             GameObject offspring = GameObject.Instantiate(this._characterToSpawn, startingPosition, this.transform.rotation, this.transform);
             Brain offspringBrain = offspring.GetComponent<Brain>();
-
-            // TODO: Apply mutation sometimes
-
+            
             offspringBrain.Init();
             offspringBrain.Action = Random.Range(0, 2) == 0 ? parent1.Action : parent2.Action;
             return offspring;

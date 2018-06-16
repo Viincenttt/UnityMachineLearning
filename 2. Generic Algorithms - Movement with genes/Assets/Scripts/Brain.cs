@@ -1,16 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts {
     [RequireComponent(typeof(ThirdPersonCharacter))]
     public class Brain : MonoBehaviour {
-        private int _dnaLength = 1;
+        [SerializeField] private float _movementSpeed = 1;
         public float TimeBeforeDeath { get; set; }
         public CharacterAction Action { get; set; }
 
         private ThirdPersonCharacter _thirdPersonCharacter;
         private Vector3 _movementVector;
-        private bool _isJumping;
         private bool _isAlive;
 
         public void Init() {
@@ -18,25 +20,21 @@ namespace Assets.Scripts {
             this.TimeBeforeDeath = 0;
             this._isAlive = true;
 
-            this.Action = (CharacterAction)Random.Range(0, 5);
+            this.Action = (CharacterAction)Random.Range(0, (int)Enum.GetValues(typeof(CharacterAction)).Cast<CharacterAction>().Max());
         }
 	
         private void FixedUpdate () {
             float horizontal = 0;
             float vertical = 0;
-            bool crouch = false;
             switch (this.Action) {
-                case CharacterAction.Forward: vertical = 1; break;
-                case CharacterAction.Back: vertical = -1; break;
-                case CharacterAction.Left: horizontal = -1; break;
-                case CharacterAction.Right: horizontal = 1; break;
-                case CharacterAction.Jump: this._isJumping = true; break;
-                case CharacterAction.Crouch: crouch = true; break;
+                case CharacterAction.Forward: vertical = this._movementSpeed; break;
+                case CharacterAction.Back: vertical = -this._movementSpeed; break;
+                case CharacterAction.Left: horizontal = -this._movementSpeed; break;
+                case CharacterAction.Right: horizontal = this._movementSpeed; break;
             }
 
             this._movementVector = vertical * Vector3.forward + horizontal * Vector3.right;
-            this._thirdPersonCharacter.Move(this._movementVector, crouch, this._isJumping);
-            this._isJumping = false;
+            this._thirdPersonCharacter.Move(this._movementVector, false, false);
             if (this._isAlive) {
                 this.TimeBeforeDeath += Time.deltaTime;
             }
