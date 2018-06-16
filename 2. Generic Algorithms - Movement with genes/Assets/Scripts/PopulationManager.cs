@@ -46,7 +46,7 @@ namespace Assets.Scripts {
             // TODO: Apply mutation sometimes
 
             offspringBrain.Init();
-            offspringBrain.DNA.Combine(parent1.DNA, parent2.DNA);
+            offspringBrain.Action = Random.Range(0, 2) == 0 ? parent1.Action : parent2.Action;
             return offspring;
         }
 

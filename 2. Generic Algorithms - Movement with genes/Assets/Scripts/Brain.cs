@@ -6,7 +6,7 @@ namespace Assets.Scripts {
     public class Brain : MonoBehaviour {
         private int _dnaLength = 1;
         public float TimeBeforeDeath { get; set; }
-        public DNA DNA { get; set; }
+        public CharacterAction Action { get; set; }
 
         private ThirdPersonCharacter _thirdPersonCharacter;
         private Vector3 _movementVector;
@@ -14,17 +14,18 @@ namespace Assets.Scripts {
         private bool _isAlive;
 
         public void Init() {
-            this.DNA = new DNA(this._dnaLength, 6);
             this._thirdPersonCharacter = this.GetComponent<ThirdPersonCharacter>();
             this.TimeBeforeDeath = 0;
             this._isAlive = true;
+
+            this.Action = (CharacterAction)Random.Range(0, 5);
         }
 	
         private void FixedUpdate () {
             float horizontal = 0;
             float vertical = 0;
             bool crouch = false;
-            switch (this.DNA.GetGene(0)) {
+            switch (this.Action) {
                 case CharacterAction.Forward: vertical = 1; break;
                 case CharacterAction.Back: vertical = -1; break;
                 case CharacterAction.Left: horizontal = -1; break;
