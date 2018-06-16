@@ -31,20 +31,21 @@ namespace Assets.Scripts {
 
         private void SpawnInitialPopulation() {
             for (int i = 0; i < this._populationSize; i++) {
-                Vector3 startingPosition = this.GetNewSpawningPosition();
-                GameObject b = GameObject.Instantiate(this._characterToSpawn, startingPosition, this.transform.rotation, this.transform);
-                b.GetComponent<Brain>().Init();
+                this.BreedNewCharacter();
             }
         }
 
-        private GameObject BreedNewCharacter(Brain parent1, Brain parent2) {
-            Vector3 startingPosition = this.GetNewSpawningPosition();
-            GameObject offspring = GameObject.Instantiate(this._characterToSpawn, startingPosition, this.transform.rotation, this.transform);
-            Brain offspringBrain = offspring.GetComponent<Brain>();
-            
-            offspringBrain.Init();
+        private void BreedNewCharacter(Brain parent1, Brain parent2) {
+            Brain offspringBrain = this.BreedNewCharacter();
             offspringBrain.Action = Random.Range(0, 2) == 0 ? parent1.Action : parent2.Action;
-            return offspring;
+        }
+
+        private Brain BreedNewCharacter() {
+            Vector3 startingPosition = this.GetNewSpawningPosition();
+            GameObject newCharacter = GameObject.Instantiate(this._characterToSpawn, startingPosition, this.transform.rotation, this.transform);
+            Brain brain = newCharacter.GetComponent<Brain>();
+            brain.Init();
+            return brain;
         }
 
         private void BreedNewPopulation() {

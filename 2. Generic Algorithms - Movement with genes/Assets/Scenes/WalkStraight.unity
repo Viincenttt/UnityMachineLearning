@@ -245,6 +245,7 @@ MonoBehaviour:
   _characterToSpawn: {fileID: 1565522241125702, guid: 7d36b5f5cbe294f368cce70409a75a03,
     type: 2}
   _populationSize: 50
+  _trialTime: 5
   _xOffSetSpawningPosition: 2
   _yOffSetSpawningPosition: -2
 --- !u!1 &712735073
@@ -393,8 +394,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1064431641}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1.591292}
+  m_LocalPosition: {x: 0, y: 0, z: 16.6}
+  m_LocalScale: {x: 1, y: 1, z: 4.8507876}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2

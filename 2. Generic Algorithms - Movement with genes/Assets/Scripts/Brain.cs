@@ -20,7 +20,7 @@ namespace Assets.Scripts {
             this.TimeBeforeDeath = 0;
             this._isAlive = true;
 
-            this.Action = (CharacterAction)Random.Range(0, (int)Enum.GetValues(typeof(CharacterAction)).Cast<CharacterAction>().Max());
+            this.Action = (CharacterAction)Random.Range(0, (int)Enum.GetValues(typeof(CharacterAction)).Cast<CharacterAction>().Max() + 1);
         }
 	
         private void FixedUpdate () {
