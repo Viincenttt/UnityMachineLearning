@@ -37,8 +37,7 @@ namespace Assets.Scripts {
 
         private void BreedNewCharacter(Brain parent1, Brain parent2) {
             Brain offspringBrain = this.BreedNewCharacter();
-            offspringBrain.PrimaryAction = Random.Range(0, 2) == 0 ? parent1.PrimaryAction : parent2.PrimaryAction;
-            offspringBrain.SecondaryAction = Random.Range(0, 2) == 0 ? parent1.SecondaryAction : parent2.SecondaryAction;
+            offspringBrain.DNA = DNA.Combine(parent1.DNA, parent2.DNA);
         }
 
         private Brain BreedNewCharacter() {

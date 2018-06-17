@@ -13,15 +13,12 @@ namespace Assets.Scripts {
 
         private Vector3 _movementVector;
         public float TimeBeforeDeath { get; set; }
-        public CharacterAction PrimaryAction { get; set; }
-        public CharacterAction SecondaryAction { get; set; }
+        public DNA DNA { get; set; }
 
         public void Init() {
             this.TimeBeforeDeath = 0;
             this._isAlive = true;
-
-            this.PrimaryAction = (CharacterAction) Random.Range(0, (int) Enum.GetValues(typeof(CharacterAction)).Cast<CharacterAction>().Max() + 1);
-            this.SecondaryAction = (CharacterAction) Random.Range(0, (int) Enum.GetValues(typeof(CharacterAction)).Cast<CharacterAction>().Max() + 1);
+            this.DNA = new DNA();
         }
 
         private void Update() {
@@ -32,10 +29,10 @@ namespace Assets.Scripts {
             this.TimeBeforeDeath += Time.deltaTime;
 
             if (this.CanSeeGround()) {
-                this.PerformAction(this.PrimaryAction);
+                this.PerformAction(this.DNA.PrimaryAction);
             }
             else {
-                this.PerformAction(this.SecondaryAction);
+                this.PerformAction(this.DNA.SecondaryAction);
             }
         }
 
