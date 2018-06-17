@@ -13,6 +13,7 @@ namespace Assets.Scripts {
 
         private Vector3 _movementVector;
         public float TimeBeforeDeath { get; set; }
+        public int WalkingActionCount { get; set; }
         public DNA DNA { get; set; }
 
         public void Init() {
@@ -42,6 +43,7 @@ namespace Assets.Scripts {
             switch (action) {
                 case CharacterAction.Forward:
                     move = 1;
+                    this.WalkingActionCount += 1;
                     break;
                 case CharacterAction.Left:
                     turn = -90;
