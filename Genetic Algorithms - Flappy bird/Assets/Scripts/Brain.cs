@@ -1,5 +1,4 @@
-﻿using System.Runtime.Remoting.Messaging;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts {
     public class Brain : MonoBehaviour {
@@ -7,14 +6,12 @@ namespace Assets.Scripts {
         public float DistanceTravelled { get; set; }
 
         [SerializeField] private GameObject _eyes;
-        private KnownSituation _currentSituation = KnownSituation.Default;
 
-       
+        private KnownSituation _currentSituation = KnownSituation.Default;
         private float _timeAlive = 0;
         private Vector3 _startPosition;
         private int _crash = 0;
         private bool _isAlive = true;
-        private bool _hasFinishedLevel = false;
         private Rigidbody2D _rigidBody;
         private Collider2D _collider;
     
@@ -69,11 +66,7 @@ namespace Assets.Scripts {
                     this._currentSituation = KnownSituation.HitBottomWall;
                 }
             }
-            this._timeAlive = PopulationManager.elapsed;
-            if (this.transform.position.x > 10 && !this._hasFinishedLevel) {
-                this._hasFinishedLevel = true;
-                PopulationManager.numberOfBirdsPassed += 1;
-            }
+            this._timeAlive += Time.deltaTime;
         }
 
 
