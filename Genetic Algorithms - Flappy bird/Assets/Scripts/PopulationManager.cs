@@ -39,7 +39,7 @@ namespace Assets.Scripts {
 
         void BreedNewPopulation() {
             // Order the population by the time before they died
-            List<Brain> population = this.GetCurrentPopulation().OrderByDescending(x => x.DistanceTravelled).ToList();
+            List<Brain> population = this.GetCurrentPopulation().OrderByDescending(x => x.DistanceTravelled - x.NumberOfCrashes).ToList();
 
             // Breed the fittest half of the population
             for (int i = 0; i < (population.Count / 2); i++) {

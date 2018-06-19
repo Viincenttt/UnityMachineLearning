@@ -4,13 +4,13 @@ namespace Assets.Scripts {
     public class Brain : MonoBehaviour {
         public DNA DNA { get; set; }
         public float DistanceTravelled { get; set; }
+        public int NumberOfCrashes = 0;
 
         [SerializeField] private GameObject _eyes;
 
         private KnownSituation _currentSituation = KnownSituation.Default;
         private float _timeAlive = 0;
         private Vector3 _startPosition;
-        private int _crash = 0;
         private bool _isAlive = true;
         private Rigidbody2D _rigidBody;
         private Collider2D _collider;
@@ -25,7 +25,7 @@ namespace Assets.Scripts {
 
         void OnCollisionEnter2D(Collision2D col) {
             if(col.gameObject.tag == "dead" || col.gameObject.tag == "top" || col.gameObject.tag == "bottom" || col.gameObject.tag == "upwall" || col.gameObject.tag == "downwall") {
-                this._crash++;
+                this.NumberOfCrashes++;
             }
 
             if (col.gameObject.tag == "bird") {
@@ -39,31 +39,23 @@ namespace Assets.Scripts {
                 return;
             }
 
-            Debug.DrawRay(this._eyes.transform.position, this._eyes.transform.forward * 2.0f, Color.red);
-            Debug.DrawRay(this._eyes.transform.position, this._eyes.transform.up* 2.0f, Color.red);
-            Debug.DrawRay(this._eyes.transform.position, -this._eyes.transform.up* 2.0f, Color.red);
+            Debug.DrawRay(this._eyes.transform.position, this._eyes.transform.forward * this.DNA.ViewingDistance, Color.green);
+            Debug.DrawRay(this._eyes.transform.position, this._eyes.transform.up* this.DNA.ViewingDistance, Color.blue);
+            Debug.DrawRay(this._eyes.transform.position, -this._eyes.transform.up* this.DNA.ViewingDistance, Color.red);
 
             this._currentSituation = KnownSituation.Default;
 
-            //RaycastHit2D hit = Physics2D.Raycast(this.eyes.transform.position, this.eyes.transform.up, 2.0f);
-            //if (hit.collider != null) {
-            //    if(hit.collider.gameObject.tag == "top") {
-            //        //this._currentSituation = KnownSituation.HitTop;
-            //    }
-            //}
-            //hit = Physics2D.Raycast(this.eyes.transform.position, -this.eyes.transform.up, 2.0f);
-            //if (hit.collider != null) {    
-            //    if(hit.collider.gameObject.tag == "bottom") {
-            //        //this._currentSituation = KnownSituation.HitBottom;
-            //    }
-            //}
-            RaycastHit2D hit = Physics2D.Raycast(this._eyes.transform.position, this._eyes.transform.up, 2.0f);
+            int arrowLayerMask = 1 << 10;
+            RaycastHit2D hit = Physics2D.Raycast(this._eyes.transform.position, this._eyes.transform.forward, this.DNA.ViewingDistance, arrowLayerMask);
             if (hit.collider != null) {
                 if (hit.collider.gameObject.tag == "upwall") {
                     this._currentSituation = KnownSituation.HitTopWall;
                 }
                 else if (hit.collider.gameObject.tag == "downwall") {
                     this._currentSituation = KnownSituation.HitBottomWall;
+                }
+                else {
+                    
                 }
             }
             this._timeAlive += Time.deltaTime;
@@ -81,22 +73,26 @@ namespace Assets.Scripts {
 
         private void ExecuteAction(KnownAction action) {
             float verticalForce = 0f;
-            float horizontalForce = 1f;
+            float horizontalForce = 0f;
 
             switch (action) {
                 case KnownAction.FlyForward:
-                    horizontalForce += 15;
+                    horizontalForce = 8;
+                    verticalForce = 100;
                     break;
                 case KnownAction.FlyDown:
-                    verticalForce += -175;
+                    verticalForce = -175;
                     break;
                 case KnownAction.FlyUp:
-                    verticalForce += 175;
+                    verticalForce = 250;
                     break;
             }
 
+
             this._rigidBody.AddForce(this.transform.right * horizontalForce);
             this._rigidBody.AddForce(this.transform.up * verticalForce * 0.1f);
+
+            this._rigidBody.velocity = Vector3.ClampMagnitude(this._rigidBody.velocity, this.DNA.MaximumSpeed);
             this.DistanceTravelled = this.transform.position.x - this._startPosition.x;
         }
     }
